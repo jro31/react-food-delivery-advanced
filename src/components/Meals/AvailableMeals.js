@@ -54,10 +54,10 @@ const AvailableMeals = () => {
           description={meal.description}
           price={meal.price}
         />
-      ))};
+      ))}
     </ul>
   }
-  if (errorMessage) content = <p>{errorMessage}</p>;
+  if (errorMessage) content = <p>{errorMessage}</p>
   if (isLoading) content = <p>Loading...</p>
 
   return (
