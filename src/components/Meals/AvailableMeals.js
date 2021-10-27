@@ -6,9 +6,12 @@ import classes from './AvailableMeals.module.css';
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const fetchMealsHandler = useCallback(async () => {
+    setIsLoading(true);
+    setErrorMessage('');
     try {
       const response = await fetch('https://react-http-94026-default-rtdb.europe-west1.firebasedatabase.app/meals.json')
 
@@ -19,7 +22,6 @@ const AvailableMeals = () => {
       const data = await response.json();
 
       const returnedMeals = [];
-
       for (const key in data) {
         returnedMeals.push({
           id: key,
@@ -33,13 +35,14 @@ const AvailableMeals = () => {
     } catch (error) {
       setErrorMessage(error.message)
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     fetchMealsHandler();
   }, [fetchMealsHandler]);
 
-  let content = <p>{errorMessage}</p>
+  let content = <p>No meals available</p>
   if (meals.length > 0) {
     content =
     <ul>
@@ -54,6 +57,8 @@ const AvailableMeals = () => {
       ))};
     </ul>
   }
+  if (errorMessage) content = <p>{errorMessage}</p>;
+  if (isLoading) content = <p>Loading...</p>
 
   return (
     <section className={classes.meals}>
